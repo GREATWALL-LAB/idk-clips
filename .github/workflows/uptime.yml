@@ -1,0 +1,23 @@
+# Checks every few hours that the live website (and, once configured, the API) answers.
+# A failed run shows up in the Actions tab and GitHub e-mails the repository owner.
+name: Uptime
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - name: Website, sitemap, robots.txt and API health
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://idk-clips.vercel.app' }}
+          API_URL: ${{ vars.API_URL }}
+        run: python3 scripts/check_live.py "$SITE_URL" ${API_URL:+"$API_URL"}

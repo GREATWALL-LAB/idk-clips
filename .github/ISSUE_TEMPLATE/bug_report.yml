@@ -1,0 +1,44 @@
+name: Bug report
+description: Something does not work as described.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! **Security problems:** please do not open a public issue; follow SECURITY.md instead.
+        Never paste passwords, tokens, `.env` files or private videos here.
+  - type: dropdown
+    id: mode
+    attributes:
+      label: How do you run IDK Clips?
+      options:
+        - Locally (local mode)
+        - Online with a worker (hybrid mode)
+        - Self-hosted server (server mode)
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Import a 10-minute MP4\n2. Export a clip in 16:9\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Output of `scripts/windows/doctor.cmd` or `bash scripts/linux/doctor.sh` helps a lot.
+      placeholder: "OS, GPU, IDK Clips version, browser"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log lines
+      description: Remove anything private first.
+      render: text

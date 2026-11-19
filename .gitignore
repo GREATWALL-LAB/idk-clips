@@ -1,0 +1,96 @@
+# =====================================================================
+# IDK Clips — repository ignore rules
+# Never commit secrets, user videos, generated clips, databases or models.
+# =====================================================================
+
+# ---- Secrets & local configuration ----------------------------------
+.env
+.env.*
+!.env.example
+*.env
+!*.env.example
+deploy/Caddyfile
+credentials.json
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets/
+
+# ---- Runtime data: uploads, clips, transcripts, databases, models ---
+/data/
+/tools/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# ---- Media files (user content must never be committed) -------------
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.avi
+*.m4v
+*.wmv
+*.flv
+*.mpg
+*.mpeg
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.opus
+
+# ---- AI model weights -----------------------------------------------
+*.gguf
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+
+# ---- Python ----------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+/backend/build/
+/processing/build/
+dist/
+
+# ---- Node / Next.js --------------------------------------------------
+node_modules/
+.next/
+out/
+/frontend/out/
+*.tsbuildinfo
+
+# ---- Hosting CLIs (local project links) -----------------------------
+.vercel/
+
+# ---- Logs ------------------------------------------------------------
+*.log
+logs/
+
+# ---- OS / editors ----------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# ---- Local AI-assistant tooling --------------------------------------
+/.claude/

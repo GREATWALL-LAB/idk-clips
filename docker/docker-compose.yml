@@ -1,0 +1,55 @@
+# IDK Clips for a team or home server (server mode: processing on this machine).
+#
+#   cp deploy/server.env.example deploy/server.env      # edit passwords and origins
+#   docker compose -f docker/docker-compose.yml --env-file deploy/server.env up -d --build
+#
+# Status: provided for self-hosting; not yet tested by the maintainers.
+# Add `--profile ai` to also run Ollama in a container.
+
+name: openclip
+
+services:
+  openclip:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    env_file: ../deploy/server.env
+    environment:
+      OPENCLIP_DATABASE_URL: postgresql+psycopg://openclip:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/openclip
+      OPENCLIP_OLLAMA_BASE_URL: ${OPENCLIP_OLLAMA_BASE_URL:-http://ollama:11434}
+    ports:
+      # Published on this machine only; put a TLS reverse proxy in front for remote access.
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - openclip-data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: openclip
+      POSTGRES_DB: openclip
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - openclip-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openclip -d openclip"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ai"]
+    restart: unless-stopped
+    volumes:
+      - ollama-models:/root/.ollama
+
+volumes:
+  openclip-data:
+  openclip-db:
+  ollama-models:

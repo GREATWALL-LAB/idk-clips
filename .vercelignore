@@ -1,0 +1,29 @@
+# Files uploaded to Vercel: the web interface sources, the API function and the backend
+# code it imports. Never upload local data, secrets, virtual environments or media.
+/data
+/tools
+/docker
+/deploy
+/scripts/windows
+/scripts/linux
+/.github
+/.claude
+**/.env
+**/.env.*
+!**/.env.example
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+/frontend/.next
+/frontend/out
+/frontend/public/*.mp4
+/backend/tests
+/processing/tests
+*.mp4
+*.mov
+*.db
+*.sqlite
+*.log
+**/*.egg-info

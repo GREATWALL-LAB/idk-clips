@@ -1,0 +1,10 @@
+# TLS reverse proxy for the IDK Clips API (Caddy obtains certificates automatically).
+# Replace the domain, then: caddy run --config deploy/Caddyfile
+api.example.com {
+	encode zstd gzip
+	reverse_proxy api:8000   # use 127.0.0.1:8000 when Caddy runs directly on the host
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+}
