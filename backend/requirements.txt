@@ -1,0 +1,22 @@
+# IDK Clips backend: runtime dependencies (pinned for reproducible installs).
+# Install with:  python -m pip install -r backend/requirements.txt
+# The local processing library is installed separately: pip install -e processing
+
+# --- Web API ---------------------------------------------------------------
+fastapi==0.162.5            # Web framework: REST routes, validation, OpenAPI docs
+uvicorn[standard]==0.54.0   # ASGI server that runs the FastAPI app
+pydantic==2.14.3            # Request/response validation and typed models
+pydantic-settings==2.16.2   # Typed configuration from environment variables and .env
+httpx==0.28.1               # HTTP client (Ollama, external AI providers, URL import)
+
+# --- Data & security ----------------------------------------------------------
+sqlalchemy==2.1.8           # Database toolkit/ORM (SQLite by default, PostgreSQL supported)
+alembic==1.20.1             # Database schema migrations (run automatically at startup)
+psycopg[binary]==3.3.9      # PostgreSQL driver (only used when OPENCLIP_DATABASE_URL is PostgreSQL)
+argon2-cffi==25.1.0         # Argon2id password hashing
+
+# --- Background jobs (optional Celery + Redis mode) --------------------------
+celery[redis]==5.7.0        # Distributed job queue (OPENCLIP_JOB_BACKEND=celery)
+
+# --- AI & media ------------------------------------------------------------------
+faster-whisper==1.2.1       # Local speech-to-text (CTranslate2 Whisper models)

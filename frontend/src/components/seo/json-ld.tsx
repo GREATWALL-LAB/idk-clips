@@ -1,0 +1,9 @@
+/**
+ * Structured data for search engines. The JSON is escaped so that no value can close the
+ * script element; it is data (type application/ld+json) and never executed.
+ */
+export function JsonLd({ data }: { data: Record<string, unknown> | null }) {
+  if (!data) return null;
+  const json = JSON.stringify(data).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />;
+}

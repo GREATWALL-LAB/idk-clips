@@ -1,0 +1,39 @@
+# Daily re-check of dependencies and secrets, even when nobody pushes: new
+# vulnerabilities are published all the time.
+name: Scheduled security audit
+
+on:
+  schedule:
+    - cron: "41 5 * * *" # daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Python dependencies (pip-audit)
+        run: |
+          pip install pip-audit==2.10.1 detect-secrets==1.5.0
+          pip-audit -r backend/requirements.txt
+      - name: npm dependencies
+        working-directory: frontend
+        run: |
+          npm ci --ignore-scripts
+          npm audit --omit=dev
+      - name: Secrets in tracked files
+        run: git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline
+      - name: Licenses of runtime dependencies
+        run: |
+          pip install -r backend/requirements.txt -e processing
+          python scripts/check_licenses.py

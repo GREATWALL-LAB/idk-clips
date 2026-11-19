@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   IDK Clips design tokens (Tailwind v4 theme variables)
+
+   Brand palette (fixed):
+     Electric Cobalt Blue #2457F5 · Fresh Lime Green #B9F56A · Pure White #FFFFFF
+     Soft Off-White #F7F9FC · Deep Ink #172033 · Light Grey #E9EDF3
+   Text colours below were chosen for WCAG AA contrast on white and off-white.
+   ------------------------------------------------------------------ */
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-bricolage), var(--font-geist-sans), ui-sans-serif, sans-serif;
+
+  /* Brand */
+  --color-brand: #2457f5;
+  --color-brand-50: #eef3ff;
+  --color-brand-100: #dce6fe;
+  --color-brand-200: #bacdfc;
+  --color-brand-600: #1d48d8;
+  --color-brand-700: #1838a8;
+  --color-lime: #b9f56a;
+  --color-lime-50: #f5fde8;
+  --color-lime-100: #e7fbc9;
+  --color-lime-700: #3d6610;
+
+  /* Neutrals */
+  --color-ink: #172033;
+  --color-ink-soft: #364156;
+  --color-muted: #545f73;
+  --color-subtle: #667085;
+  --color-canvas: #f7f9fc;
+  --color-surface: #ffffff;
+  --color-mist: #eef2f8;
+  --color-line: #e9edf3;
+  --color-line-strong: #d6dde7;
+
+  /* Status */
+  --color-success: #11805a;
+  --color-success-50: #e8f7f0;
+  --color-warning: #8a5300;
+  --color-warning-50: #fff5de;
+  --color-danger: #c23a2e;
+  --color-danger-50: #fdeeec;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(23 32 51 / 0.05), 0 10px 28px -18px rgb(23 32 51 / 0.22);
+  --shadow-lift: 0 2px 4px rgb(23 32 51 / 0.06), 0 22px 48px -24px rgb(23 32 51 / 0.32);
+  --shadow-brand: 0 10px 24px -12px rgb(36 87 245 / 0.55);
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.45;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Base styles
+   ------------------------------------------------------------------ */
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(185 245 106 / 0.7);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(23 32 51 / 0.18) transparent;
+  }
+}
+
+/* Respect users who prefer less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Reusable utilities
+   ------------------------------------------------------------------ */
+@utility surface-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+@utility font-display-tight {
+  font-family: var(--font-display);
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+/* Long-form documentation rendered from the repository's Markdown files. */
+@utility prose-docs {
+  color: var(--color-ink-soft);
+  line-height: 1.7;
+  font-size: 0.975rem;
+
+  & h1 {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--color-ink);
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+  & h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    padding-top: 0.5rem;
+  }
+  & h3 {
+    font-size: 1.1rem;
+    color: var(--color-ink);
+    font-weight: 650;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  & p,
+  & ul,
+  & ol,
+  & table,
+  & pre,
+  & blockquote {
+    margin-bottom: 1rem;
+  }
+  & ul {
+    list-style: disc;
+    padding-left: 1.4rem;
+  }
+  & ol {
+    list-style: decimal;
+    padding-left: 1.4rem;
+  }
+  & li {
+    margin: 0.25rem 0;
+  }
+  & a {
+    color: var(--color-brand);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  & strong {
+    color: var(--color-ink);
+  }
+  & code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--color-mist);
+    border-radius: 0.375rem;
+    padding: 0.1rem 0.35rem;
+    color: var(--color-ink);
+    /* Long URLs and commands must wrap instead of widening the page on phones. */
+    overflow-wrap: anywhere;
+  }
+  & pre {
+    background: var(--color-ink);
+    color: #e9edf3;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  & pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    display: block;
+    overflow-x: auto;
+  }
+  & th,
+  & td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  & th {
+    color: var(--color-ink);
+    font-weight: 600;
+    background: var(--color-canvas);
+  }
+  & blockquote {
+    border-left: 3px solid var(--color-lime);
+    background: var(--color-lime-50);
+    padding: 0.75rem 1rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+  }
+  & hr {
+    border-color: var(--color-line);
+    margin: 2rem 0;
+  }
+}

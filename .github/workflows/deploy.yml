@@ -1,0 +1,72 @@
+# Deploys the website to Vercel after CI passes on main.
+#
+# Needs three repository secrets (Settings > Secrets and variables > Actions):
+#   VERCEL_TOKEN       a Vercel access token (vercel.com/account/tokens)
+#   VERCEL_ORG_ID      from frontend/.vercel/project.json after `vercel link`
+#   VERCEL_PROJECT_ID  from the same file
+# and optionally the repository variable SITE_URL (the production address).
+# Without the secrets the job is skipped, so forks never try to deploy.
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL || 'https://idk-clips.vercel.app' }}
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Check that deployment is configured
+        id: configured
+        working-directory: .
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "Vercel secrets are not set; skipping the deployment."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v5
+        if: steps.configured.outputs.ok == 'true'
+      - uses: actions/setup-node@v5
+        if: steps.configured.outputs.ok == 'true'
+        with:
+          node-version: 22
+      - name: Build and deploy
+        if: steps.configured.outputs.ok == 'true'
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://idk-clips.vercel.app' }}
+          NEXT_PUBLIC_GITHUB_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          npx --yes vercel@65.12.1 pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx --yes vercel@65.12.1 build --prod --token="$VERCEL_TOKEN"
+          npx --yes vercel@65.12.1 deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      - name: Check the live site
+        if: steps.configured.outputs.ok == 'true'
+        working-directory: .
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://idk-clips.vercel.app' }}
+        run: python3 scripts/check_live.py "$SITE_URL"

@@ -1,0 +1,44 @@
+# Public API for the hosted website (hybrid mode) with an automatic-TLS reverse proxy.
+# The database is external (for example Supabase); the web interface is hosted separately
+# (for example Cloudflare Pages). See docs/DEPLOYMENT.md.
+#
+#   cp deploy/api.env.example deploy/api.env              # edit it
+#   cp deploy/Caddyfile.example deploy/Caddyfile          # set your domain
+#   docker compose -f deploy/docker-compose.prod.yml up -d --build
+#
+# Status: provided as a starting point; not yet tested by the maintainers.
+
+name: openclip-prod
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        WEB_BUILD: "false"
+    restart: unless-stopped
+    env_file: ./api.env
+    environment:
+      # Only Caddy can reach this container (no published port), so its headers are trusted.
+      OPENCLIP_FORWARDED_ALLOW_IPS: "*"
+    volumes:
+      - api-data:/data
+    expose:
+      - "8000"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - api
+
+volumes:
+  api-data:
+  caddy-data:

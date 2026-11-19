@@ -1,0 +1,8 @@
+# OPTIONAL: NVIDIA GPU acceleration for speech transcription (Windows/Linux, CUDA 12).
+# Large download (about 1-2 GB). Only install this if you have an NVIDIA GPU.
+#   backend\.venv\Scripts\python -m pip install -r backend\requirements-gpu.txt
+# IDK Clips adds these libraries to the DLL search path automatically on Windows.
+# Without them, transcription runs on the CPU (slower, but works everywhere).
+
+nvidia-cublas-cu12          # cuBLAS 12 (cublas64_12.dll) required by CTranslate2 4.x
+nvidia-cudnn-cu12==9.*      # cuDNN 9 required by CTranslate2 4.x

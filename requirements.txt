@@ -1,0 +1,14 @@
+# Python packages for the HOSTED API only (the Vercel function in api/index.py).
+#
+# The hosted website runs in hybrid mode: users' own computers transcribe and render,
+# so the speech-to-text and video libraries are not needed here. To install IDK Clips
+# on your computer, follow docs/INSTALLATION.md instead (backend/requirements.txt).
+fastapi==0.162.5
+pydantic==2.14.3
+pydantic-settings==2.16.2
+httpx==0.28.1
+sqlalchemy==2.1.8
+alembic==1.20.1
+psycopg[binary]==3.3.9
+argon2-cffi==25.1.0
+numpy==2.5.4

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability (privately)
+    url: https://github.com/advisories
+    about: Please use GitHub's private vulnerability reporting (Security tab > Report a vulnerability), as described in SECURITY.md.
+  - name: Documentation
+    url: https://idk-clips.vercel.app/docs/
+    about: Installation, configuration, self-hosting and troubleshooting guides.
