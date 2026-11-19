@@ -2,7 +2,7 @@
 -r requirements.txt
 
 pytest==9.2.0               # Test runner
-httpx2==2.16.0              # HTTP client used by Starlette's TestClient (by the httpx author)
+httpx2==2.16.2              # HTTP client used by Starlette's TestClient (by the httpx author)
 ruff==0.17.4                # Linter and import sorter
 pip-audit==2.10.1           # Checks installed packages against known vulnerabilities
 detect-secrets==1.5.0       # Scans files for accidentally committed secrets
