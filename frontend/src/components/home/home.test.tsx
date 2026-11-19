@@ -12,6 +12,8 @@ async function renderHome() {
 
 describe("homepage", () => {
   it("has every required section and navigation entry", async () => {
+    // CI sets the real repository URL; this test checks the menu without it.
+    vi.stubEnv("NEXT_PUBLIC_GITHUB_URL", "");
     const { container } = await renderHome();
     for (const id of ["how-it-works", "features", "run-locally", "use-online", "open-source"]) {
       expect(container.querySelector(`#${id}`), id).not.toBeNull();
