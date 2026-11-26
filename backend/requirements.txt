@@ -5,7 +5,7 @@
 # --- Web API ---------------------------------------------------------------
 fastapi==0.162.5            # Web framework: REST routes, validation, OpenAPI docs
 uvicorn[standard]==0.54.0   # ASGI server that runs the FastAPI app
-pydantic==2.14.3            # Request/response validation and typed models
+pydantic==2.14.4            # Request/response validation and typed models
 pydantic-settings==2.16.2   # Typed configuration from environment variables and .env
 httpx==0.28.1               # HTTP client (Ollama, external AI providers, URL import)
 
