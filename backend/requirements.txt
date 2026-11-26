@@ -10,7 +10,7 @@ pydantic-settings==2.16.2   # Typed configuration from environment variables and
 httpx==0.28.1               # HTTP client (Ollama, external AI providers, URL import)
 
 # --- Data & security ----------------------------------------------------------
-sqlalchemy==2.1.8           # Database toolkit/ORM (SQLite by default, PostgreSQL supported)
+sqlalchemy==2.1.9           # Database toolkit/ORM (SQLite by default, PostgreSQL supported)
 alembic==1.20.1             # Database schema migrations (run automatically at startup)
 psycopg[binary]==3.3.9      # PostgreSQL driver (only used when OPENCLIP_DATABASE_URL is PostgreSQL)
 argon2-cffi==25.1.0         # Argon2id password hashing
